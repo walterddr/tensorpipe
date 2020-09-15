@@ -13,6 +13,8 @@
 #include <string>
 #include <vector>
 
+#include <tensorpipe/core/buffer.h>
+
 namespace tensorpipe {
 
 // Messages consist of a primary buffer and zero or more separate
@@ -49,12 +51,15 @@ class Message final {
   std::vector<Payload> payloads;
 
   struct Tensor {
-    void* data{nullptr};
-    size_t length{0};
+    tensorpipe::Buffer buffer;
 
-    // Users may include arbitrary metadata in the following fields.
+    // Users may include arbitrary metadata in the following field.
     // This may contain allocation hints for the receiver, for example.
     std::string metadata;
+
+    // The following fields are marked for deprecation. Use `buffer` instead.
+    void* data{nullptr};
+    size_t length{0};
   };
 
   // Holds the tensors that are offered to the side channels.
